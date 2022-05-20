@@ -1,0 +1,12 @@
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nginx-ingress-app-protect-dos-online-boutique
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress
+    namespace: online-boutique
+roleRef:
+  kind: ClusterRole
+  name: nginx-ingress-app-protect-dos
+  apiGroup: rbac.authorization.k8s.io

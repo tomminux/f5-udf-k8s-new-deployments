@@ -37,6 +37,8 @@ spec:
                   type: string
                 tlsProfileName:
                   type: string
+                persistenceProfile:
+                  type: string
                 policyName:
                   type: string
                   pattern: '^([A-z0-9-_+])*([A-z0-9])$'
@@ -85,6 +87,8 @@ spec:
                       service:
                         type: string
                         pattern: '^([A-z0-9-_+])*([A-z0-9])$'
+                      loadBalancingMethod:
+                        type: string
                       nodeMemberLabel:
                         type: string
                         pattern: '^[a-zA-Z0-9][-A-Za-z0-9_.\/]{0,61}[a-zA-Z0-9]=[a-zA-Z0-9][-A-Za-z0-9_.]{0,61}[a-zA-Z0-9]$'
@@ -170,7 +174,7 @@ spec:
           jsonPath: .metadata.creationTimestamp
       subresources:
         status: {}
-          
+
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -253,16 +257,21 @@ spec:
                 virtualServerName:
                   type: string
                   pattern: '^([A-z0-9-_+])*([A-z0-9])$'
+                host:
+                  type: string
+                  pattern: '^(([a-zA-Z0-9\*]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$'
                 policyName:
                   type: string
                   pattern: '^([A-z0-9-_+])*([A-z0-9])$'
-                mode: 
+                mode:
                   type: string
                   enum: [standard, performance]
                 type:
                   type: string
                   enum: [tcp, udp]
                 snat:
+                  type: string
+                persistenceProfile:
                   type: string
                 allowVlans:
                   items:
@@ -304,6 +313,8 @@ spec:
                       type: integer
                       minimum: 1
                       maximum: 65535
+                    loadBalancingMethod:
+                      type: string
                     monitor:
                       type: object
                       properties:
@@ -429,6 +440,25 @@ spec:
                         required:
                           - type
                           - interval
+                      monitors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                              enum: [http, https, tcp]
+                            send:
+                              type: string
+                            recv:
+                              type: string
+                            interval:
+                              type: integer
+                            timeout:
+                              type: integer
+                          required:
+                            - type
+                            - interval
                     required:
                       - dataServerName
               required:
@@ -473,6 +503,9 @@ spec:
                 virtualServerAddress:
                   type: string
                   pattern: '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
+                host:
+                  type: string
+                  pattern: '^(([a-zA-Z0-9\*]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$'
                 ipamLabel:
                   type: string
                 iRules:
@@ -581,6 +614,8 @@ spec:
                     http2:
                       type: string
                       pattern: '^\/([A-z0-9-_+]+\/)+([A-z0-9-]+\/?)*$'
+                    persistenceProfile:
+                      type: string
                     rewriteProfile:
                       type: string
                       pattern: '^\/([A-z0-9-_+]+\/)+([A-z0-9]+\/?)*$'

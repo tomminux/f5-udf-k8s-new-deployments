@@ -1,0 +1,155 @@
+## ..:: Online Boutique gRPC Service ConfigMap for k8s-bigip-ctlr (AS3) ::..
+## ----------------------------------------------------------------------------
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: f5-to-online-boutique
+  namespace: online-boutique
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+          "class": "ADC",
+          "schemaVersion": "3.0.0",
+          "label": "online-boutique-tcp-services",
+          "remark": "TCP LBs for Online Boutique gRPC services",
+          "online-boutique-tcp-services": {
+              "class": "Tenant",
+              "online-boutique": {
+                "class": "Application",
+                "cart-service-vs": {
+                  "class": "Service_TCP",
+                  "virtualAddresses": [
+                    "10.1.10.103"
+                  ],
+                  "virtualPort": 7070,
+                  "pool": "cart-service-pool"
+                },
+                "cart-service-pool": {
+                  "class": "Pool",
+                  "monitors": [
+                    "tcp"
+                  ],
+                  "members": [{
+                    "servicePort": 7070,
+                    "serverAddresses": []
+                  }]
+                },
+                "recommendation-service-vs": {
+                  "class": "Service_TCP",
+                  "virtualAddresses": [
+                    "10.1.10.103"
+                  ],
+                  "virtualPort": 8080,
+                  "pool": "recommendation-service-pool"
+                },
+                "recommendation-service-pool": {
+                  "class": "Pool",
+                  "monitors": [
+                    "tcp"
+                  ],
+                  "members": [{
+                    "servicePort": 8080,
+                    "serverAddresses": []
+                  }]
+                },
+                "productcatalog-service-vs": {
+                  "class": "Service_TCP",
+                  "virtualAddresses": [
+                    "10.1.10.103"
+                  ],
+                  "virtualPort": 3550,
+                  "pool": "productcatalog-service-pool"
+                },
+                "productcatalog-service-pool": {
+                  "class": "Pool",
+                  "monitors": [
+                    "tcp"
+                  ],
+                  "members": [{
+                    "servicePort": 3550,
+                    "serverAddresses": []
+                  }]
+                },
+                "currency-service-vs": {
+                  "class": "Service_TCP",
+                  "virtualAddresses": [
+                    "10.1.10.103"
+                  ],
+                  "virtualPort": 7000,
+                  "pool": "currency-service-pool"
+                },
+                "currency-service-pool": {
+                  "class": "Pool",
+                  "monitors": [
+                    "tcp"
+                  ],
+                  "members": [{
+                    "servicePort": 7000,
+                    "serverAddresses": []
+                  }]
+                },
+                "shipping-service-vs": {
+                  "class": "Service_TCP",
+                  "virtualAddresses": [
+                    "10.1.10.103"
+                  ],
+                  "virtualPort": 50051,
+                  "pool": "shipping-service-pool"
+                },
+                "shipping-service-pool": {
+                  "class": "Pool",
+                  "monitors": [
+                    "tcp"
+                  ],
+                  "members": [{
+                    "servicePort": 50051,
+                    "serverAddresses": []
+                  }]
+                },
+                "checkout-service-vs": {
+                  "class": "Service_TCP",
+                  "virtualAddresses": [
+                    "10.1.10.103"
+                  ],
+                  "virtualPort": 5050,
+                  "pool": "checkout-service-pool"
+                },
+                "checkout-service-pool": {
+                  "class": "Pool",
+                  "monitors": [
+                    "tcp"
+                  ],
+                  "members": [{
+                    "servicePort": 5050,
+                    "serverAddresses": []
+                  }]
+                },
+                "ad-service-vs": {
+                  "class": "Service_TCP",
+                  "virtualAddresses": [
+                    "10.1.10.103"
+                  ],
+                  "virtualPort": 9555,
+                  "pool": "ad-service-pool"
+                },
+                "ad-service-pool": {
+                  "class": "Pool",
+                  "monitors": [
+                    "tcp"
+                  ],
+                  "members": [{
+                    "servicePort": 9555,
+                    "serverAddresses": []
+                  }]
+                }
+              }
+        }
+      }
+    }

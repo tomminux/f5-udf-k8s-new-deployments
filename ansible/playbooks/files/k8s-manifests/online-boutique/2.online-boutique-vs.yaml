@@ -1,0 +1,63 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: online-boutique-vs
+  namespace: online-boutique
+spec:
+  host: online-boutique.mc.se-demo.cloud
+  upstreams:
+  - name: online-boutique-frontend
+    service: frontend
+    port: 80
+  routes:
+  - path: /
+    action:
+      pass: online-boutique-frontend
+---
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: online-boutique-jf-vs
+  namespace: online-boutique
+spec:
+  host: boutique-jf.mc.se-demo.cloud
+  upstreams:
+  - name: online-boutique-frontend
+    service: frontend
+    port: 80
+  routes:
+  - path: /
+    action:
+      pass: online-boutique-frontend
+---
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: online-boutique-dr-vs
+  namespace: online-boutique
+spec:
+  host: boutique-dr.mc.se-demo.cloud
+  upstreams:
+  - name: online-boutique-frontend
+    service: frontend
+    port: 80
+  routes:
+  - path: /
+    action:
+      pass: online-boutique-frontend
+---
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: online-boutique-fl-vs
+  namespace: online-boutique
+spec:
+  host: boutique-fl.mc.se-demo.cloud
+  upstreams:
+  - name: online-boutique-frontend
+    service: frontend
+    port: 80
+  routes:
+  - path: /
+    action:
+      pass: online-boutique-frontend
